@@ -1,0 +1,59 @@
+plugins {
+    id 'java'
+}
+
+apply plugin: 'jacoco'
+apply plugin: 'findbugs'
+apply plugin: 'pmd'
+apply plugin: 'application'
+
+
+group 'org.poc'
+version '1.0-SNAPSHOT'
+mainClassName="poc.client.GameCLI"
+
+sourceCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+}
+jar {
+    manifest {
+        attributes "Main-Class" : "poc.client.GameCLI"
+    }
+    archiveName 'client.jar'
+
+}
+run{
+    standardInput = System.in
+}
+findbugs {
+    ignoreFailures = true
+}
+
+findbugsMain{
+    reports {
+        xml.enabled = false
+        html.enabled = true
+    }
+}
+
+findbugsTest{
+    reports {
+        xml.enabled = false
+        html.enabled = true
+    }
+}
+test {
+    testLogging {
+        events "passed", "skipped", "failed"
+    }
+    finalizedBy jacocoTestReport
+}
+
+dependencies {
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+    testCompile("org.assertj:assertj-core:3.11.1")
+
+}
+
